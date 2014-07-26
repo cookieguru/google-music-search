@@ -14,9 +14,9 @@ print_r($results[0]);
 ```
 Outputs:
 ```
-Google_Music_Song Object
+Google_Music_Track Object
 (
-    [url] => https://play.google.com/store/music/album?id=Bmzumnj5jezhfto4zyho2rmalf4&tid=song-Thyyj6vnxberijx5qud6se6h34y
+    [url] => https://play.google.com/store/music/album?id=Bhtcvtbwf7q532tc7xk4j3j4hia&tid=song-Turpkonwsebw6hzstiith765abu
     [artist] => Wezz Devall feat. Alana Aldea
     [title] => On The Rise (Original Mix)
     [price] => $1.99
