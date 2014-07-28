@@ -36,7 +36,7 @@ class Google_Music_API {
 	}
 
 	/**
-	 * Sets the HTTP User Agent used by the cURL request(s)
+	 * Performs a search in the Google Play store (screen scraping)
 	 *
 	 * @param  string $query The string to query
 	 * @return array An array of objects containing the results
