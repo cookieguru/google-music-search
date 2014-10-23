@@ -48,6 +48,9 @@ class Google_Music_API {
 		if(strpos($html, 'We couldn\'t find anything for your search') !== FALSE) {
 			return array();
 		}
+		if(strpos($html, 'An unexpected error has occurred. Please try again later.') !== FALSE) {
+			return array();
+		}
 
 		$doc = new DOMDocument();
 		$doc->formatOutput = false;

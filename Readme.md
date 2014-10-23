@@ -1,13 +1,13 @@
 Google Music Search
 ===================
 This is a PHP class to search the Google Play Music store.  It should be
-considered alpha-grade.
+considered beta grade.
 
 Usage
 -----
 ```php
 $api = new Google_Music_API();
-$api->set_user_agent('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0');
+$api->set_user_agent('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0');
 $api->verify_peer(false); //This line may not be needed in your situation
 $results = $api->search('Wezz Devall feat. Alana Aldea - On The Rise (Original Mix)');
 print_r($results[0]);
