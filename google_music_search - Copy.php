@@ -1,4 +1,6 @@
 <?php
+namespace cookieguru\GoogleMusicAPI;
+
 /**
  * Searches the Google Play Music store for tracks.
  *
@@ -8,7 +10,7 @@
  * @link      https://github.com/cookieguru/google-music-search
  * @version   0.1
  */
-class Google_Music_API {
+class GoogleMusicAPI {
 	const BASE = 'https://play.google.com';
 	private $ch;
 
@@ -22,7 +24,7 @@ class Google_Music_API {
 	 *
 	 * @param string $user_agent The User Agent to send
 	 */
-	public function set_user_agent($user_agent) {
+	public function setUserAgent($user_agent) {
 		curl_setopt($this->ch, CURLOPT_USERAGENT, $user_agent);
 	}
 
@@ -31,7 +33,7 @@ class Google_Music_API {
 	 *
 	 * @param bool $bool Whether or not to verify the certificate
 	 */
-	public function verify_peer($bool) {
+	public function verifyPeer($bool) {
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $bool);
 	}
 
@@ -53,13 +55,9 @@ class Google_Music_API {
 		$doc->formatOutput = false;
 		@$doc->loadHTML($html);
 		$finder = new DomXPath($doc);
-		$root = $finder->query("//*[contains(@class,'card-list')]")->item(0);
-		if(!$root) {
-			throw new Exception('Google returned an error');
-		}
 
 		$links = array();
-		foreach($root->getElementsByTagName('div') as $div) {
+		foreach($finder->query("//*[contains(@class,'card-list')]")->item(0)->getElementsByTagName('div') as $div) {
 			$xml = simplexml_load_string($doc->saveXML($div));
 			$title = $xml->xpath("//*[contains(@class,'title')]");
 			if(isset($title[0]) && isset($title[0]->attributes()->href)) {
@@ -98,7 +96,7 @@ class Google_Music_API {
  * @link      https://github.com/cookieguru/google-music-search
  * @version   0.1
  */
-class Google_Music_Track {
+class GoogleMusicTrack {
     public function __toString() {
         return serialize($this);
     }
