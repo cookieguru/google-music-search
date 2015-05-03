@@ -1,0 +1,23 @@
+{
+	"name": "cookieguru/googlemusicsearch",
+	"description": "PHP class to search the Google Play Music store",
+	"keywords": ["Google Music", "Google Play Store"],
+	"version": "1.0.0",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "cookieguru",
+			"homepage": "https://github.com/cookieguru/"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/cookieguru/google-music-search/issues"
+	},
+	"homepage": "https://github.com/cookieguru/google-music-search",
+	"autoload": {
+		"psr-4": {
+			"cookieguru\\googlemusicsearch\\": ""
+		}
+	}
+}

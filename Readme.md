@@ -1,20 +1,31 @@
 Google Music Search
 ===================
-This is a PHP class to search the Google Play Music store.  It should be
-considered beta grade.
+This is a PHP class to search the Google Play Music store.
+
+Installation
+------------
+Install with [Composer](https://getcomposer.org/).  A sample `composer.json`:
+```json
+{
+	"require": {
+		"cookieguru/googlemusicsearch": "dev-master"
+	}
+}
+```
+If you're not using Composer, just include `API.php` and `GoogleMusicTrack.php`
 
 Usage
 -----
 ```php
-$api = new Google_Music_API();
-$api->set_user_agent('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0');
-$api->verify_peer(false); //This line may not be needed in your situation
+$api = new \cookieguru\googlemusicsearch\API();
+$api->setUserAgent('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0');
+$api->verifyPeer(false); //This line may not be needed in your situation
 $results = $api->search('Wezz Devall feat. Alana Aldea - On The Rise (Original Mix)');
 print_r($results[0]);
 ```
 Outputs:
 ```
-Google_Music_Track Object
+cookieguru\googlemusicsearch\GoogleMusicTrack Object
 (
     [url] => https://play.google.com/store/music/album?id=Bhtcvtbwf7q532tc7xk4j3j4hia&tid=song-Turpkonwsebw6hzstiith765abu
     [artist] => Wezz Devall feat. Alana Aldea

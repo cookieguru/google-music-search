@@ -1,4 +1,6 @@
 <?php
+namespace cookieguru\googlemusicsearch;
+
 /**
  * Searches the Google Play Music store for tracks.
  *
@@ -6,9 +8,9 @@
  * @copyright 2014
  * @license   MIT
  * @link      https://github.com/cookieguru/google-music-search
- * @version   0.1
+ * @version   1.0.0
  */
-class Google_Music_API {
+class API {
 	const BASE = 'https://play.google.com';
 	private $ch;
 
@@ -22,7 +24,7 @@ class Google_Music_API {
 	 *
 	 * @param string $user_agent The User Agent to send
 	 */
-	public function set_user_agent($user_agent) {
+	public function setUserAgent($user_agent) {
 		curl_setopt($this->ch, CURLOPT_USERAGENT, $user_agent);
 	}
 
@@ -31,7 +33,7 @@ class Google_Music_API {
 	 *
 	 * @param bool $bool Whether or not to verify the certificate
 	 */
-	public function verify_peer($bool) {
+	public function verifyPeer($bool) {
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $bool);
 	}
 
@@ -39,7 +41,7 @@ class Google_Music_API {
 	 * Performs a search in the Google Play store (screen scraping)
 	 *
 	 * @param  string $query The string to query
-	 * @return array An array of objects containing the results
+	 * @return array An array of cookieguru\googlemusicsearch\GoogleMusicTrack
 	 */
 	public function search($query) {
 		curl_setopt($this->ch, CURLOPT_URL, self::BASE . '/store/search?c=music&docType=4&q=' . urlencode($query));
@@ -49,17 +51,13 @@ class Google_Music_API {
 			return array();
 		}
 
-		$doc = new DOMDocument();
+		$doc = new \DOMDocument();
 		$doc->formatOutput = false;
 		@$doc->loadHTML($html);
-		$finder = new DomXPath($doc);
-		$root = $finder->query("//*[contains(@class,'card-list')]")->item(0);
-		if(!$root) {
-			throw new Exception('Google returned an error');
-		}
+		$finder = new \DomXPath($doc);
 
 		$links = array();
-		foreach($root->getElementsByTagName('div') as $div) {
+		foreach($finder->query("//*[contains(@class,'card-list')]")->item(0)->getElementsByTagName('div') as $div) {
 			$xml = simplexml_load_string($doc->saveXML($div));
 			$title = $xml->xpath("//*[contains(@class,'title')]");
 			if(isset($title[0]) && isset($title[0]->attributes()->href)) {
@@ -73,7 +71,7 @@ class Google_Music_API {
 					$price = (string)$price[0]->span;
 				}
 
-				$temp = new Google_Music_Track();
+				$temp = new \cookieguru\googlemusicsearch\GoogleMusicTrack();
 				$temp->url    = self::BASE . $title[0]->attributes()->href;
 				$temp->artist = (string)$artist[0]->a;
 				$temp->title  = trim($title[0]);
@@ -85,21 +83,4 @@ class Google_Music_API {
 
 		return array_values(array_unique($links));
 	}
-}
-
-/**
- * When iterating over results from the Google Play Store search page, there are
- * often duplicates.  This class exists solely to provide a value for the
- * array_unique() function as objects in PHP are not serialized by default
- *
- * @author    Cookie Guru
- * @copyright 2014
- * @license   MIT
- * @link      https://github.com/cookieguru/google-music-search
- * @version   0.1
- */
-class Google_Music_Track {
-    public function __toString() {
-        return serialize($this);
-    }
 }
