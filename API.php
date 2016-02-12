@@ -41,7 +41,7 @@ class API {
 	 * Performs a search in the Google Play store (screen scraping)
 	 *
 	 * @param  string $query The string to query
-	 * @return array An array of cookieguru\googlemusicsearch\GoogleMusicTrack
+	 * @return \cookieguru\googlemusicsearch\GoogleMusicTrack[]
 	 */
 	public function search($query) {
 		curl_setopt($this->ch, CURLOPT_URL, self::BASE . '/store/search?c=music&docType=4&q=' . urlencode($query));
