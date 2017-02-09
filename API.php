@@ -8,7 +8,7 @@ namespace cookieguru\googlemusicsearch;
  * @copyright 2014
  * @license   MIT
  * @link      https://github.com/cookieguru/google-music-search
- * @version   1.0.1
+ * @version   1.0.2
  */
 class API {
 	const BASE = 'https://play.google.com';

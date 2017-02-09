@@ -8,7 +8,7 @@ Install with [Composer](https://getcomposer.org/).  A sample `composer.json`:
 ```json
 {
 	"require": {
-		"cookieguru/googlemusicsearch": "~1.0.1"
+		"cookieguru/googlemusicsearch": "~1.0.2"
 	}
 }
 ```
