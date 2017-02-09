@@ -8,7 +8,7 @@ Install with [Composer](https://getcomposer.org/).  A sample `composer.json`:
 ```json
 {
 	"require": {
-		"cookieguru/googlemusicsearch": "dev-master"
+		"cookieguru/googlemusicsearch": "~1.0.1"
 	}
 }
 ```
@@ -18,7 +18,7 @@ Usage
 -----
 ```php
 $api = new \cookieguru\googlemusicsearch\API();
-$api->setUserAgent('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0');
+$api->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0');
 $api->verifyPeer(false); //This line may not be needed in your situation
 $results = $api->search('Wezz Devall feat. Alana Aldea - On The Rise (Original Mix)');
 print_r($results[0]);

@@ -8,7 +8,7 @@ namespace cookieguru\googlemusicsearch;
  * @copyright 2014
  * @license   MIT
  * @link      https://github.com/cookieguru/google-music-search
- * @version   1.0.0
+ * @version   1.0.1
  */
 class API {
 	const BASE = 'https://play.google.com';
@@ -44,13 +44,42 @@ class API {
 	 * @return \cookieguru\googlemusicsearch\GoogleMusicTrack[]
 	 */
 	public function search($query) {
-		curl_setopt($this->ch, CURLOPT_URL, self::BASE . '/store/search?c=music&docType=4&q=' . urlencode($query));
+		curl_setopt($this->ch, CURLOPT_URL, self::BASE . '/store/search?c=music&q=' . urlencode($query));
 
 		$html = curl_exec($this->ch);
 		if(strpos($html, 'We couldn\'t find anything for your search') !== FALSE) {
 			return array();
 		}
 
+		if(preg_match('/href="(\/store\/music\/collection\/5:search_cluster:4.*?)"/', $html, $matches)) {
+			if($_html = $this->getAllSongs(html_entity_decode($matches[1]))) {
+				$html = $_html;
+			}
+		}
+
+		return $this->parseElements($html);
+	}
+
+	/**
+	 * Make a second request for just the full list songs
+	 * @param $href
+	 * @return string|bool
+	 */
+	private function getAllSongs($href) {
+		curl_setopt($this->ch, CURLOPT_REFERER, curl_getinfo($this->ch, CURLINFO_EFFECTIVE_URL));
+		curl_setopt($this->ch, CURLOPT_POST, true);
+		curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields = 'xhr=1');
+		curl_setopt($this->ch, CURLOPT_HTTPHEADER, array('Content-Length: ' . strlen($fields)));
+		curl_setopt($this->ch, CURLOPT_URL, self::BASE . $href);
+
+		$html = curl_exec($this->ch);
+		if(strlen($html) < 100 || strpos($html, 'the requested URL was not found on this server') !== false) {
+			return false;
+		}
+		return $html;
+	}
+
+	private function parseElements($html) {
 		$doc = new \DOMDocument();
 		$doc->formatOutput = false;
 		@$doc->loadHTML($html);
