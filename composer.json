@@ -2,7 +2,7 @@
 	"name": "cookieguru/googlemusicsearch",
 	"description": "PHP class to search the Google Play Music store",
 	"keywords": ["Google Music", "Google Play Store"],
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"type": "library",
 	"license": "MIT",
 	"requires": {

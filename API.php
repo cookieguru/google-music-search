@@ -8,7 +8,7 @@ namespace cookieguru\googlemusicsearch;
  * @copyright 2014
  * @license   MIT
  * @link      https://github.com/cookieguru/google-music-search
- * @version   1.0.2
+ * @version   1.0.3
  */
 class API {
 	const BASE = 'https://play.google.com';
@@ -86,7 +86,12 @@ class API {
 		$finder = new \DomXPath($doc);
 
 		$links = array();
-		foreach($finder->query("//*[contains(@class,'card-list')]")->item(0)->getElementsByTagName('div') as $div) {
+		$card_list = $finder->query("//*[contains(@class,'card-list')]");
+		if(!$card_list->length) {
+			return array();
+		}
+
+		foreach($card_list->item(0)->getElementsByTagName('div') as $div) {
 			$xml = simplexml_load_string($doc->saveXML($div));
 			$title = $xml->xpath("//*[contains(@class,'title')]");
 			if(isset($title[0]) && isset($title[0]->attributes()->href)) {
