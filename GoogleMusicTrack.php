@@ -1,4 +1,5 @@
 <?php
+
 namespace cookieguru\googlemusicsearch;
 
 /**
@@ -10,15 +11,15 @@ namespace cookieguru\googlemusicsearch;
  * @copyright 2014
  * @license   MIT
  * @link      https://github.com/cookieguru/google-music-search
- * @version   1.0.3
+ * @version   1.0.4
  */
 class GoogleMusicTrack {
-	public $url    = null;
+	public $url = null;
 	public $artist = null;
-	public $title  = null;
-	public $price  = null;
+	public $title = null;
+	public $price = null;
 
-    public function __toString() {
-        return serialize($this);
-    }
+	public function __toString() {
+		return serialize($this);
+	}
 }

@@ -8,7 +8,7 @@ Install with [Composer](https://getcomposer.org/).  A sample `composer.json`:
 ```json
 {
 	"require": {
-		"cookieguru/googlemusicsearch": "~1.0.3"
+		"cookieguru/googlemusicsearch": "~1.0.4"
 	}
 }
 ```
@@ -19,7 +19,7 @@ Usage
 ```php
 require 'vendor/autoload.php';
 $api = new \cookieguru\googlemusicsearch\API();
-$api->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0');
+$api->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0');
 $api->verifyPeer(false); //This line may not be needed in your situation
 $results = $api->search('Wezz Devall feat. Alana Aldea - On The Rise (Original Mix)');
 print_r($results[0]);
@@ -31,7 +31,7 @@ cookieguru\googlemusicsearch\GoogleMusicTrack Object
     [url] => https://play.google.com/store/music/album?id=Bhtcvtbwf7q532tc7xk4j3j4hia&tid=song-Turpkonwsebw6hzstiith765abu
     [artist] => Wezz Devall feat. Alana Aldea
     [title] => On The Rise (Original Mix)
-    [price] => $1.99
+    [price] => $1.29
 )
 ```
 

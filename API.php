@@ -1,5 +1,8 @@
 <?php
+
 namespace cookieguru\googlemusicsearch;
+
+use DOMElement;
 
 /**
  * Searches the Google Play Music store for tracks.
@@ -8,10 +11,9 @@ namespace cookieguru\googlemusicsearch;
  * @copyright 2014
  * @license   MIT
  * @link      https://github.com/cookieguru/google-music-search
- * @version   1.0.3
+ * @version   1.0.4
  */
 class API {
-	const BASE = 'https://play.google.com';
 	private $ch;
 
 	public function __construct() {
@@ -40,19 +42,19 @@ class API {
 	/**
 	 * Performs a search in the Google Play store (screen scraping)
 	 *
-	 * @param  string $query The string to query
-	 * @return \cookieguru\googlemusicsearch\GoogleMusicTrack[]
+	 * @param string $query The string to query
+	 * @return GoogleMusicTrack[]
 	 */
 	public function search($query) {
-		curl_setopt($this->ch, CURLOPT_URL, self::BASE . '/store/search?c=music&q=' . urlencode($query));
+		curl_setopt($this->ch, CURLOPT_URL, 'https://play.google.com/store/search?c=music&q=' . urlencode($query));
 
 		$html = curl_exec($this->ch);
-		if(strpos($html, 'We couldn\'t find anything for your search') !== FALSE) {
+		if(strpos($html, 'We couldn\'t find anything for your search') !== false) {
 			return array();
 		}
 
-		if(preg_match('/href="(\/store\/music\/collection\/5:search_cluster:4.*?)"/', $html, $matches)) {
-			if($_html = $this->getAllSongs(html_entity_decode($matches[1]))) {
+		if(preg_match('/aria-label="Check out more content from Songs".+href="(.+?)"/', $html, $matches)) {
+			if($_html = $this->getAllSongs($matches[1])) {
 				$html = $_html;
 			}
 		}
@@ -62,59 +64,54 @@ class API {
 
 	/**
 	 * Make a second request for just the full list songs
-	 * @param $href
+	 * @param string $href
 	 * @return string|bool
 	 */
 	private function getAllSongs($href) {
 		curl_setopt($this->ch, CURLOPT_REFERER, curl_getinfo($this->ch, CURLINFO_EFFECTIVE_URL));
-		curl_setopt($this->ch, CURLOPT_POST, true);
-		curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields = 'xhr=1');
-		curl_setopt($this->ch, CURLOPT_HTTPHEADER, array('Content-Length: ' . strlen($fields)));
-		curl_setopt($this->ch, CURLOPT_URL, self::BASE . $href);
-
+		curl_setopt($this->ch, CURLOPT_URL, $href);
 		$html = curl_exec($this->ch);
 		if(strlen($html) < 100 || strpos($html, 'the requested URL was not found on this server') !== false) {
 			return false;
 		}
+
 		return $html;
 	}
 
+	/**
+	 * @param string $html
+	 * @return GoogleMusicTrack[]
+	 */
 	private function parseElements($html) {
 		$doc = new \DOMDocument();
 		$doc->formatOutput = false;
 		@$doc->loadHTML($html);
 		$finder = new \DomXPath($doc);
+		$return = array();
 
-		$links = array();
-		$card_list = $finder->query("//*[contains(@class,'card-list')]");
-		if(!$card_list->length) {
-			return array();
-		}
-
-		foreach($card_list->item(0)->getElementsByTagName('div') as $div) {
-			$xml = simplexml_load_string($doc->saveXML($div));
-			$title = $xml->xpath("//*[contains(@class,'title')]");
-			if(isset($title[0]) && isset($title[0]->attributes()->href)) {
-				$artist = $xml->xpath("//*[contains(@class,'subtitle-container')]");
-
-				$price = $xml->xpath("//*[contains(@class,'price-container')]");
-				if(isset($price[0]->span[2])) {
-					$price = (string)$price[0]->span[2];
-				} else {
-					$price = $price[0]->xpath("//button[contains(@class,'price')][contains(@class,'buy')]");
-					$price = (string)$price[0]->span;
-				}
-
-				$temp = new \cookieguru\googlemusicsearch\GoogleMusicTrack();
-				$temp->url    = self::BASE . $title[0]->attributes()->href;
-				$temp->artist = (string)$artist[0]->a;
-				$temp->title  = trim($title[0]);
-				$temp->price  = $price;
-
-				$links[] = $temp;
+		foreach($finder->query('//button[@data-item-id]') as $button) {
+			/** @var DOMElement $button */
+			$container = $button;
+			$i = 0;
+			while($container->tagName != 'c-wiz' && $i < 20) {
+				$container = $container->parentNode;
+				$i++;
 			}
+			$links = $container->getElementsByTagName('a');
+			$artist_href = $links[$links->length - 1];
+			/** @var DOMElement $artist_href */
+			$title_href = $links[$links->length - 2];
+			/** @var DOMElement $title_href */
+
+			$temp = new GoogleMusicTrack();
+			$temp->artist = $artist_href->nodeValue;
+			$temp->title = $title_href->nodeValue;
+			$temp->url = rtrim($title_href->baseURI, '/') . $title_href->getAttribute('href');
+			$temp->price = $button->textContent;
+
+			$return[] = $temp;
 		}
 
-		return array_values(array_unique($links));
+		return array_values(array_unique($return));
 	}
 }
