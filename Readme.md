@@ -1,6 +1,14 @@
-Google Music Search
-===================
+Google Music Search - Deprecated
+================================
 This is a PHP class to search the Google Play Music store.
+
+Deprecation notice
+------------------
+Due to [Google's descision to replace Google Play Music with YouTube Music][1]
+support for this package has begun to sunset and can be considered deprecated.
+The package will be maintained for as long as Google Play Music continues to
+operate a storefront.  According to [the announcement on May 12, 2020][2] the
+official transition will be "later in 2020".
 
 Installation
 ------------
@@ -57,3 +65,6 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[1]: https://www.pcmag.com/news/rip-google-play-music-users-told-to-migrate-to-youtube-music
+[2]: https://youtube.googleblog.com/2020/05/youtube-music-transfer-google-play-music-library.html
