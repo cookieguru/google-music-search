@@ -5,11 +5,9 @@ This was a PHP class to search the Google Play Music store.
 Archive notice
 --------------
 Due to [Google's descision to replace Google Play Music with YouTube Music][1]
-support for this package has begun to sunset and can be considered deprecated.
-The package will be maintained for as long as Google Play Music continues to
-operate a storefront.  According to [the announcement on May 12, 2020][2] the
-official transition will be "later in 2020".  The actual transition
-[happened][3] on October 7th, 2020.
+support for this package has ended.  According to [the announcement on May 12,
+2020][2] the official transition was to begin "later in 2020".  The actual
+transition [happened][3] on October 7th, 2020.
 
 Installation
 ------------
